@@ -18,7 +18,7 @@ class RegisterController extends Controller
             'email'     => $request->email,
             'password'  => $request->password,
             'name'      => $request->name,
-            'role'      => 'U'
+            'role'      => 1
         ]);
 
         if( $response->status() == 200 ){

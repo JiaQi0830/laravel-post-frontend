@@ -76,16 +76,21 @@ class PostController extends Controller
     public function show($id)
     {
         //
+        
         $token = session('token');
 
         $response = Http::withHeaders([
             'Authorization' => 'Bearer '.$token
-        ])->post("http://localhost:1234/api/posts/{$id}");
+        ])->get("http://localhost:1234/api/posts/{$id}");
 
-        $result = $response->json();
-        $post = $result['post'];
+        $result     = $response->json();
+        $post       = $result['post'];
+        $comments   = $result['comments'];
+        $hasLiked   = $result['hasLiked'];
+        $totalLikes  = $result['totalLikes'];
 
-        return view('post_content', compact('post'));
+        return view('post_content', compact('post', 'comments', 'hasLiked', 'totalLikes'));
+        
     }
 
     /**
@@ -143,5 +148,26 @@ class PostController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function comment(Request $request, $id){
+        $token = session('token');
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer '.$token
+        ])->post("http://localhost:1234/api/posts/{$id}/comment", [
+            'content'     => $request->comment
+        ]);
+
+        return redirect()->back();
+
+    }
+
+    public function like($id){
+        $token = session('token');
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer '.$token
+        ])->get("http://localhost:1234/api/posts/{$id}/like");
+        return redirect()->back();
     }
 }

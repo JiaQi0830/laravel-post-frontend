@@ -23,5 +23,7 @@ Route::post('/login', 'LoginController@login')->name('login');
 Route::get('/logout', 'LoginController@logout')->name('logout');
 Route::get('/register', 'RegisterController@index')->name('register.index');
 Route::post('/register', 'RegisterController@register')->name('register');
+Route::post('/posts/{post}/comments', 'PostController@comment')->name('comment');
+Route::get('/posts/{post}/like', 'PostController@like')->name('like');
 
 Route::resource('posts', 'PostController');
