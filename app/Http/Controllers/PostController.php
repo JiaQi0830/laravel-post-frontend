@@ -76,7 +76,7 @@ class PostController extends Controller
     public function show($id)
     {
         //
-        
+
         $token = session('token');
 
         $response = Http::withHeaders([
@@ -106,7 +106,7 @@ class PostController extends Controller
 
         $response = Http::withHeaders([
             'Authorization' => 'Bearer '.$token
-        ])->post("http://localhost:1234/api/posts/{$id}");
+        ])->get("http://localhost:1234/api/posts/{$id}");
 
         $result = $response->json();
         $post = $result['post'];

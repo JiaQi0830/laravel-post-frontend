@@ -5,11 +5,6 @@
 {{ method_field('PUT') }}
   <div class="row">
     <h1 class="col-6">Title:</h1>
-    <button class=col-1>
-      <a href = "{{ route('posts.edit', ['post'=>$post['id']]) }}"> 
-        Edit
-      </a>
-    </button>
   </div>
 
   <input class="text" name="title" value="{{ $post['title'] }}"/>

@@ -17,8 +17,7 @@ class RegisterController extends Controller
         $response = Http::post("http://localhost:1234/api/register", [
             'email'     => $request->email,
             'password'  => $request->password,
-            'name'      => $request->name,
-            'role'      => 1
+            'name'      => $request->name
         ]);
 
         if( $response->status() == 200 ){

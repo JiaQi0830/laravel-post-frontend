@@ -35,5 +35,7 @@ class LoginController extends Controller
             ])->get('http://localhost:1234/api/logout');
 
         $request->session()->flush();
+
+        return redirect('/');
     }
 }
