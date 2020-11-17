@@ -18,9 +18,9 @@ class LoginController extends Controller
             'email' => $request->email,
             'password' => $request->password,
         ]);
-        
         if($response->status() == 200){
             $request->session()->put('token', $response['token']);
+            $request->session()->put('role', $response['role']);
             return redirect('/posts');
         }
         else{
@@ -33,7 +33,6 @@ class LoginController extends Controller
         $response = Http::withHeaders([
             'Authorization' => 'Bearer '.$token
             ])->get('http://localhost:1234/api/logout');
-
         $request->session()->flush();
 
         return redirect('/');

@@ -19,7 +19,6 @@ class PostController extends Controller
         $response = Http::withHeaders([
             'Authorization' => 'Bearer '.$token
         ])->get('http://localhost:1234/api/posts');
-
         if($response->status() == 200){
             $result = $response->json();
             $posts = $result['posts'];
@@ -82,7 +81,6 @@ class PostController extends Controller
         $response = Http::withHeaders([
             'Authorization' => 'Bearer '.$token
         ])->get("http://localhost:1234/api/posts/{$id}");
-
         $result     = $response->json();
         $post       = $result['post'];
         $comments   = $result['comments'];
