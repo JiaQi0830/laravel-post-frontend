@@ -19,7 +19,6 @@ class RegisterController extends Controller
             'password'  => $request->password,
             'name'      => $request->name
         ]);
-
         if( $response->status() == 200 ){
             return redirect('login');
         }

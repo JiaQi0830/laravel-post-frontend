@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Log;
 
 class PostController extends Controller
 {
@@ -165,6 +166,7 @@ class PostController extends Controller
 
     public function like($id){
         $token = session('token');
+        
         $response = Http::withHeaders([
             'Authorization' => 'Bearer '.$token
         ])->get("http://localhost:1234/api/posts/{$id}/like");

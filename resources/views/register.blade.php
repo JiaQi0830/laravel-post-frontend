@@ -1,16 +1,30 @@
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<!DOCTYPE html>
+<html>
+<title>W3.CSS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<body>
 
-<h1>Register</h1>
-<form method="POST" action="{{ route('register') }}">
+<header class="w3-container w3-teal">
+  <h1>Register</h1>
+</header>
+
+<div class="w3-container w3-half w3-margin-top">
+<form class="w3-container w3-card-4" method="POST" action="{{ route('register') }}">
   @csrf
   <label>Name:</label>
-  <input type = "text" name = "name" required/>
+  <input class="w3-input" type = "text" name = "name" required/>
   <br/>
   <label>Email:</label>
-  <input type = "email" name = "email" required/>
+  <input class="w3-input" type = "email" name = "email" required/>
   <br/>
   <label>Password:</label>
-  <input type = "password" name = "password" required/>
+  <input class="w3-input" type = "password" name = "password" required/>
   <br/>
   <button type="submit" value="Submit">Submit</button>
 </form>
+
+</div>
+
+</body>
+</html> 

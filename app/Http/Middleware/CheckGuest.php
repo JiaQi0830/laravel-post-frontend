@@ -18,6 +18,6 @@ class CheckGuest
         if(!session('token')){
             return $next($request);
         }
-        return back();
+        return redirect('/posts');
     }
 }
