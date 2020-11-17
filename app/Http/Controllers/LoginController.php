@@ -14,17 +14,29 @@ class LoginController extends Controller
 
     public function login(Request $request){
 
-        $response = Http::post("http://localhost:1234/api/login", [
-            'email' => $request->email,
-            'password' => $request->password,
-        ]);
+        if(session('token')){
+            $token = session('token');
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer '.$token
+                ])->post("http://localhost:1234/api/login", [
+                    'email' => $request->email,
+                    'password' => $request->password,
+                ]);
+        }else{
+            $response = Http::post("http://localhost:1234/api/login", [
+                'email' => $request->email,
+                'password' => $request->password,
+            ]);
+        }
+
+
         if($response->status() == 200){
             $request->session()->put('token', $response['token']);
             $request->session()->put('role', $response['role']);
             return redirect('/posts');
         }
         else{
-            return redirect()->back();
+            return back();
         }
     }
 

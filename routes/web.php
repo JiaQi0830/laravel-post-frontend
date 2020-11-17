@@ -19,12 +19,15 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', 'HomeController@index');
-Route::get('/login', 'LoginController@index');
-Route::post('/login', 'LoginController@login')->name('login');
 Route::get('/logout', 'LoginController@logout')->name('logout');
-Route::get('/register', 'RegisterController@index')->name('register.index');
-Route::post('/register', 'RegisterController@register')->name('register');
 Route::post('/posts/{post}/comments', 'PostController@comment')->name('comment');
 Route::get('/posts/{post}/like', 'PostController@like')->name('like');
+
+Route::middleware(['checkguest'])->group(function () {
+  Route::post('/login', 'LoginController@login')->name('login');
+  Route::get('/login', 'LoginController@index');
+  Route::post('/register', 'RegisterController@register')->name('register');
+  Route::get('/register', 'RegisterController@index')->name('register.index');
+});
 
 Route::resource('posts', 'PostController');

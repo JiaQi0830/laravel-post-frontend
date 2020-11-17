@@ -101,7 +101,9 @@ class PostController extends Controller
     {
         //
         $token = session('token');
-
+        if(session('role') != 2){
+            return back();
+        }
         $response = Http::withHeaders([
             'Authorization' => 'Bearer '.$token
         ])->get("http://localhost:1234/api/posts/{$id}");
