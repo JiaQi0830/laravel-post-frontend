@@ -16,14 +16,16 @@ class LoginController extends Controller
 
         if(session('token')){
             $token = session('token');
+            $api_url = config('app.api');
+
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer '.$token
-                ])->post("http://localhost:1234/api/login", [
+                ])->post("{$api_url}/login", [
                     'email' => $request->email,
                     'password' => $request->password,
                 ]);
         }else{
-            $response = Http::post("http://localhost:1234/api/login", [
+            $response = Http::post("{$api_url}/login", [
                 'email' => $request->email,
                 'password' => $request->password,
             ]);
@@ -42,9 +44,11 @@ class LoginController extends Controller
 
     public function logout(Request $request){
         $token = session('token');
+        $api_url = config('app.api');
+
         $response = Http::withHeaders([
             'Authorization' => 'Bearer '.$token
-            ])->get('http://localhost:1234/api/logout');
+            ])->get("{$api_url}/logout");
         $request->session()->flush();
 
         return redirect('/');

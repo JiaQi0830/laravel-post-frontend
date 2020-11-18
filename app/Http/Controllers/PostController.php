@@ -13,13 +13,17 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
         //
+        // dd(config('app.api'));
         $token = session('token');
+        $api_url = config('app.api');
+
         $response = Http::withHeaders([
             'Authorization' => 'Bearer '.$token
-        ])->get('http://localhost:1234/api/posts');
+        ])->get("{$api_url}/posts");
         if($response->status() == 200){
             $result = $response->json();
             $posts = $result['posts'];
@@ -50,10 +54,11 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $token = session('token');
+        $api_url = config('app.api');
 
         $response = Http::withHeaders([
             'Authorization' => 'Bearer '.$token
-        ])->post('http://localhost:1234/api/posts', [
+        ])->post("{$api_url}/posts", [
             'title' => $request->title,
             'content' => $request->content
         ]);
@@ -78,10 +83,11 @@ class PostController extends Controller
         //
 
         $token = session('token');
+        $api_url = config('app.api');
 
         $response = Http::withHeaders([
             'Authorization' => 'Bearer '.$token
-        ])->get("http://localhost:1234/api/posts/{$id}");
+        ])->get("{$api_url}/posts/{$id}");
         $result     = $response->json();
         $post       = $result['post'];
         $comments   = $result['comments'];
@@ -102,12 +108,14 @@ class PostController extends Controller
     {
         //
         $token = session('token');
+        $api_url = config('app.api');
+
         if(session('role') != 2){
             return back();
         }
         $response = Http::withHeaders([
             'Authorization' => 'Bearer '.$token
-        ])->get("http://localhost:1234/api/posts/{$id}");
+        ])->get("{$api_url}/posts/{$id}");
 
         $result = $response->json();
         $post = $result['post'];
@@ -125,9 +133,11 @@ class PostController extends Controller
     public function update(Request $request, $id)
     {
         $token = session('token');
+        $api_url = config('app.api');
+
         $response = Http::withHeaders([
             'Authorization' => 'Bearer '.$token
-        ])->post("http://localhost:1234/api/posts/{$id}/update", [
+        ])->post("{$api_url}/posts/{$id}/update", [
             'title'     => $request->title,
             'content'   => $request->content
         ]);
@@ -153,10 +163,11 @@ class PostController extends Controller
 
     public function comment(Request $request, $id){
         $token = session('token');
+        $api_url = config('app.api');
 
         $response = Http::withHeaders([
             'Authorization' => 'Bearer '.$token
-        ])->post("http://localhost:1234/api/posts/{$id}/comment", [
+        ])->post("{$api_url}/posts/{$id}/comment", [
             'content'     => $request->comment
         ]);
 
@@ -166,10 +177,11 @@ class PostController extends Controller
 
     public function like($id){
         $token = session('token');
-        
+        $api_url = config('app.api');
+
         $response = Http::withHeaders([
             'Authorization' => 'Bearer '.$token
-        ])->get("http://localhost:1234/api/posts/{$id}/like");
+        ])->get("{$api_url}/posts/{$id}/like");
         return redirect()->back();
     }
 }
