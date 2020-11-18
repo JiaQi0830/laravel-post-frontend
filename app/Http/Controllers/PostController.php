@@ -17,8 +17,6 @@ class PostController extends Controller
     public function index(Request $request)
     {
         //
-        // dd($request->all());
-        // dd(session('role'));
         $currentPage = 1;
         if($request->page){
             $currentPage = $request->page;
@@ -96,7 +94,6 @@ class PostController extends Controller
             'Authorization' => 'Bearer '.$token
         ])->get("{$api_url}/posts/{$id}");
         $result     = $response->json();
-
         $post       = $result['post'];
         $comments   = $result['comments'];
         $hasLiked   = $result['hasLiked'];

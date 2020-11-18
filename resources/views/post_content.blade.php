@@ -29,7 +29,7 @@ and is wrapped around the whole page content, except for the footer in this exam
   <div class="w3-card-4 w3-margin w3-white">
     <div class="w3-container">
       <h3><b>{{$post['title']}}</b></h3>
-      <h5>{{$post['name']}}, <span class="w3-opacity">{{ date('d-M-y', strtotime($post['created_at'])) }}</span></h5>
+      <h5>{{$post['users']['name']}}, <span class="w3-opacity">{{ date('d-M-y', strtotime($post['created_at'])) }}</span></h5>
     </div>
 
     <div class="w3-container">
