@@ -19,8 +19,10 @@ class RegisterController extends Controller
         $response = Http::post("{$api_url}/register", [
             'email'     => $request->email,
             'password'  => $request->password,
+            'password_confirmation'  => $request->password_confirmation,
             'name'      => $request->name
         ]);
+        
         if( $response->status() == 200 ){
             return redirect('login');
         }

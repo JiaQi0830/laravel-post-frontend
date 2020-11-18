@@ -49,7 +49,7 @@ and is wrapped around the whole page content, except for the footer in this exam
   <div class="w3-card-4 w3-margin w3-white">
     <div class="w3-container">
       <h3><b>{{ $post['title'] }}</b></h3>
-      <h5>{{ $post['author'] }}, <span class="w3-opacity">{{ date('d-M-y', strtotime($post['created_at'])) }}</span></h5>
+      <h5>{{ $post['name'] }}, <span class="w3-opacity">{{ date('d-M-y', strtotime($post['created_at'])) }}</span></h5>
     </div>
 
     <div class="w3-container">
@@ -75,8 +75,16 @@ and is wrapped around the whole page content, except for the footer in this exam
 
 <!-- Footer -->
 <footer class="w3-container w3-dark-grey w3-padding-32 w3-margin-top">
-  <button class="w3-button w3-black w3-disabled w3-padding-large w3-margin-bottom">Previous</button>
-  <button class="w3-button w3-black w3-padding-large w3-margin-bottom">Next »</button>
+  @if( $currentPage >1 )
+    <a href="{!! route('posts.index', ['page' => $currentPage-1]) !!}">
+      <button class="w3-button w3-black w3-padding-large w3-margin-bottom">Previous</button>
+    </a>
+  @endif
+  @if( $currentPage < $paginator['last_page'])
+  <a href="{!! route('posts.index', ['page' => $currentPage+1]) !!}">
+    <button class="w3-button w3-black w3-padding-large w3-margin-bottom">Next »</button>
+  </a>
+  @endif
   <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
 </footer>
 

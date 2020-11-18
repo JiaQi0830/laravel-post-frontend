@@ -21,6 +21,9 @@
   <label>Password:</label>
   <input class="w3-input" type = "password" name = "password" required/>
   <br/>
+  <label>Retype Your Password:</label>
+  <input class="w3-input" type = "password" name = "password_confirmation" required/>
+  <br/>
   <button type="submit" value="Submit">Submit</button>
 </form>
 

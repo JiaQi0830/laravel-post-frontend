@@ -13,10 +13,9 @@ class LoginController extends Controller
     }
 
     public function login(Request $request){
-
+        $api_url = config('app.api');
         if(session('token')){
             $token = session('token');
-            $api_url = config('app.api');
 
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer '.$token

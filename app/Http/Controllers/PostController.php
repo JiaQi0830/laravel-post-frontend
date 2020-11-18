@@ -14,20 +14,27 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function index()
+    public function index(Request $request)
     {
         //
-        // dd(config('app.api'));
+        // dd($request->all());
+        // dd(session('role'));
+        $currentPage = 1;
+        if($request->page){
+            $currentPage = $request->page;
+        }
         $token = session('token');
         $api_url = config('app.api');
 
         $response = Http::withHeaders([
             'Authorization' => 'Bearer '.$token
-        ])->get("{$api_url}/posts");
+        ])->get("{$api_url}/posts?page={$currentPage}");
+        
         if($response->status() == 200){
             $result = $response->json();
-            $posts = $result['posts'];
-            return view('post',compact('posts'));
+            $paginator = $result['posts'];
+            $posts = $result['posts']['data'];
+            return view('post',compact('posts', 'currentPage', 'paginator'));
         }
 
         return redirect('/login');
@@ -89,6 +96,7 @@ class PostController extends Controller
             'Authorization' => 'Bearer '.$token
         ])->get("{$api_url}/posts/{$id}");
         $result     = $response->json();
+
         $post       = $result['post'];
         $comments   = $result['comments'];
         $hasLiked   = $result['hasLiked'];
