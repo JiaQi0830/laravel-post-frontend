@@ -31,4 +31,9 @@
 </div>
 
 </body>
+@if(Session::has('message'))
+<script> 
+  alert(`{{Session('message')}}`)
+</script>
+@endif
 </html> 

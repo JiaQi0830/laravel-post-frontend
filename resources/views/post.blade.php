@@ -89,4 +89,9 @@ and is wrapped around the whole page content, except for the footer in this exam
 </footer>
 
 </body>
+@if(Session::has('message'))
+<script> 
+  alert(`{{Session('message')}}`)
+</script>
+@endif
 </html>

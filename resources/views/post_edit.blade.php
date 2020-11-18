@@ -14,3 +14,9 @@
   <button type="submit" value="Submit">Submit</button>
 
 </form>
+
+@if(Session::has('message'))
+<script> 
+  alert(`{{Session('message')}}`)
+</script>
+@endif

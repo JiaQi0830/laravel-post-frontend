@@ -30,14 +30,26 @@ class LoginController extends Controller
             ]);
         }
 
+        $message = '';
+        if($response->json()){
+            if(isset($response->json()['error'])){
+                foreach($response->json()['error'] as $item){
+                    foreach($item as $error_msg){
+                        $message .= "{$error_msg}\n";
+                    }
+                }
+            }else{
+                $message = $response->json()['message'];
+            }
+        }
 
         if($response->status() == 200){
-            $request->session()->put('token', $response['token']);
-            $request->session()->put('role', $response['role']);
-            return redirect('/posts');
+            $request->session()->put('token', $response['data']['token']);
+            $request->session()->put('role', $response['data']['role']);
+            return redirect('/posts')->with(['message' =>  $message]);;
         }
         else{
-            return back();
+            return back()->with(['message' =>  $message]);
         }
     }
 
@@ -48,8 +60,22 @@ class LoginController extends Controller
         $response = Http::withHeaders([
             'Authorization' => 'Bearer '.$token
             ])->get("{$api_url}/logout");
-        $request->session()->flush();
+        
+        $message = '';
+        if($response->json()){
+            if(isset($response->json()['error'])){
+                foreach($response->json()['error'] as $item){
+                    foreach($item as $error_msg){
+                        $message .= "{$error_msg}\n";
+                    }
+                }
+            }else{
+                $message = $response->json()['message'];
+            }
+        }
 
-        return redirect('/');
+        $request->session()->flush();
+        
+        return redirect('/posts')->with(['message' =>  $message]);
     }
 }

@@ -30,8 +30,8 @@ class PostController extends Controller
         
         if($response->status() == 200){
             $result = $response->json();
-            $paginator = $result['posts'];
-            $posts = $result['posts']['data'];
+            $paginator = $result['data']['posts'];
+            $posts = $result['data']['posts']['data'];
             return view('post',compact('posts', 'currentPage', 'paginator'));
         }
 
@@ -47,6 +47,7 @@ class PostController extends Controller
     public function create()
     {
         //
+        dd(session('token'));
         return view('post_register');
     }
 
@@ -68,11 +69,24 @@ class PostController extends Controller
             'content' => $request->content
         ]);
 
+        $message = '';
+        if($response->json()){
+            if(isset($response->json()['error'])){
+                foreach($response->json()['error'] as $item){
+                    foreach($item as $error_msg){
+                        $message .= "{$error_msg}\n";
+                    }
+                }
+            }else{
+                $message = $response->json()['message'];
+            }
+        }
+
         if($response->status() == 200){
-            return redirect('/posts');
+            return redirect('/posts')->with(['message' =>  $message]);
         }
         else{
-            return redirect()->back();
+            return redirect()->back()->with(['message' =>  $message]);;
         }
 
     }
@@ -93,13 +107,18 @@ class PostController extends Controller
         $response = Http::withHeaders([
             'Authorization' => 'Bearer '.$token
         ])->get("{$api_url}/posts/{$id}");
-        $result     = $response->json();
-        $post       = $result['post'];
-        $comments   = $result['comments'];
-        $hasLiked   = $result['hasLiked'];
-        $totalLikes  = $result['totalLikes'];
 
-        return view('post_content', compact('post', 'comments', 'hasLiked', 'totalLikes'));
+        if($response->status() == 200){
+            $result     = $response->json()['data'];
+            $post       = $result['post'];
+            $comments   = $result['comments'];
+            $hasLiked   = $result['hasLiked'];
+            $totalLikes  = $result['totalLikes'];
+
+            return view('post_content', compact('post', 'comments', 'hasLiked', 'totalLikes'));
+        }
+        
+        return redirect('/posts');
         
     }
 
@@ -118,14 +137,19 @@ class PostController extends Controller
         if(session('role') != 2){
             return back();
         }
+
         $response = Http::withHeaders([
             'Authorization' => 'Bearer '.$token
         ])->get("{$api_url}/posts/{$id}");
 
-        $result = $response->json();
-        $post = $result['post'];
+        if($response->status() == 200){
+            $result = $response->json()['data'];
+            $post = $result['post'];
 
-        return view('post_edit', compact('post'));
+            return view('post_edit', compact('post'));
+        }
+
+        return redirect('/posts');
     }
 
     /**
@@ -146,12 +170,25 @@ class PostController extends Controller
             'title'     => $request->title,
             'content'   => $request->content
         ]);
-
-        if($response->status() == 200){
-            return redirect('/posts');
+                
+        $message = '';
+        if($response->json()){
+            if(isset($response->json()['error'])){
+                foreach($response->json()['error'] as $item){
+                    foreach($item as $error_msg){
+                        $message .= "{$error_msg}\n";
+                    }
+                }
+            }else{
+                $message = $response->json()['message'];
+            }
         }
 
-        return redirect()->back();
+        if($response->status() == 200){
+            return redirect("/posts/{$id}")->with(['message' =>  $message]);;
+        }
+
+        return redirect('/posts')->with(['message' =>  $message]);;
 
     }
 
@@ -176,17 +213,50 @@ class PostController extends Controller
             'content'     => $request->comment
         ]);
 
-        return redirect()->back();
+        if($response->status() == 200) {
+            return redirect()->back();
+        }
+
+        $message = '';
+        if($response->json()){
+            if(isset($response->json()['error'])){
+                foreach($response->json()['error'] as $item){
+                    foreach($item as $error_msg){
+                        $message .= "{$error_msg}\n";
+                    }
+                }
+            }else{
+                $message = $response->json()['message'];
+            }
+        }
+
+        return redirect()->back()->with(['message' =>  $message]);
 
     }
 
     public function like($id){
         $token = session('token');
         $api_url = config('app.api');
-
         $response = Http::withHeaders([
             'Authorization' => 'Bearer '.$token
         ])->get("{$api_url}/posts/{$id}/like");
-        return redirect()->back();
+
+        $message = '';
+        if($response->json()){
+            if(isset($response->json()['error'])){
+                foreach($response->json()['error'] as $item){
+                    foreach($item as $error_msg){
+                        $message .= "{$error_msg}\n";
+                    }
+                }
+            }else{
+                $message = $response->json()['message'];
+            }
+        }
+
+        if($response->status() == 200 ){
+            return redirect()->back();    
+        }
+        return redirect()->back()->with(['message' =>  $message]);
     }
 }
