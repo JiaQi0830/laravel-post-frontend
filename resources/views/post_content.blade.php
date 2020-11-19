@@ -27,8 +27,23 @@ and is wrapped around the whole page content, except for the footer in this exam
 <div class="w3-col l8 s12">
   <!-- Blog entry -->
   <div class="w3-card-4 w3-margin w3-white">
-    <div class="w3-container">
-      <h3><b>{{$post['title']}}</b></h3>
+    <div class="w3-row w3-container">
+      <div class="w3-col m10 s12">
+        <h3 class=""><b>{{$post['title']}}</b></h3>
+      </div>
+      @if(Session::get('role') == 2)
+          @if( $isAuthor == 1)
+            <div class="w3-col m2 s12">
+              <p>
+              <form action="{{ route('posts.destroy', $post['id']) }}" method="POST">
+                @method('DELETE')
+                @csrf
+                <button type="submit" value="Submit" class="w3-button w3-padding-large w3-white w3-border"><b>Delete</b></button>
+            </form>
+              </p>
+            </div>
+          @endif
+        @endif
       <h5>{{$post['users']['name']}}, <span class="w3-opacity">{{ date('d-M-y', strtotime($post['created_at'])) }}</span></h5>
     </div>
 
@@ -36,13 +51,15 @@ and is wrapped around the whole page content, except for the footer in this exam
       <p>{{$post['content']}}</p>
       <div class="w3-row">
         @if(Session::get('role') == 2)
-          <div class="w3-col m1 s12">
-            <p>
-            <a href = "{{ route('posts.edit', ['post'=>$post['id']]) }}"> 
-                <button class="w3-button w3-padding-large w3-white w3-border"><b>Edit</b></button>
-              </a>
-            </p>
-          </div>
+          @if( $isAuthor == 1)
+            <div class="w3-col m1 s12">
+              <p>
+              <a href = "{{ route('posts.edit', ['post'=>$post['id']]) }}"> 
+                  <button class="w3-button w3-padding-large w3-white w3-border"><b>Edit</b></button>
+                </a>
+              </p>
+            </div>
+          @endif
         @endif
         @if(Session::get('role') == 1)
           <div class="w3-col m7 s12">

@@ -17,6 +17,7 @@ class PostController extends Controller
     public function index(Request $request)
     {
         //
+        // dd(session('token'));
         $currentPage = 1;
         if($request->page){
             $currentPage = $request->page;
@@ -47,8 +48,12 @@ class PostController extends Controller
     public function create()
     {
         //
-        dd(session('token'));
-        return view('post_register');
+        if(session('token')){
+            return view('post_register');
+        }
+        else {
+            return redirect('/posts');
+        }
     }
 
     /**
@@ -113,9 +118,10 @@ class PostController extends Controller
             $post       = $result['post'];
             $comments   = $result['comments'];
             $hasLiked   = $result['hasLiked'];
-            $totalLikes  = $result['totalLikes'];
+            $totalLikes = $result['totalLikes'];
+            $isAuthor   = $result['isAuthor'];
 
-            return view('post_content', compact('post', 'comments', 'hasLiked', 'totalLikes'));
+            return view('post_content', compact('post', 'comments', 'hasLiked', 'totalLikes', 'isAuthor'));
         }
         
         return redirect('/posts');
@@ -201,6 +207,32 @@ class PostController extends Controller
     public function destroy($id)
     {
         //
+        $token = session('token');
+        $api_url = config('app.api');
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer '.$token
+        ])->get("{$api_url}/posts/{$id}/delete");
+
+        $message = '';
+        if($response->json()){
+            if(isset($response->json()['error'])){
+                foreach($response->json()['error'] as $item){
+                    foreach($item as $error_msg){
+                        $message .= "{$error_msg}\n";
+                    }
+                }
+            }else{
+                $message = $response->json()['message'];
+            }
+        }
+
+        if($response->status() == 200) {
+            return redirect('/posts')->with(['message' =>  $message]);
+        }
+
+        return redirect()->back()->with(['message' =>  $message]);
+
     }
 
     public function comment(Request $request, $id){
