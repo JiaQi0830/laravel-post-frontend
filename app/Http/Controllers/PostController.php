@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use Log;
 
 class PostController extends Controller
 {
@@ -17,7 +16,6 @@ class PostController extends Controller
     public function index(Request $request)
     {
         //
-        // dd(session('token'));
         $currentPage = 1;
         if($request->page){
             $currentPage = $request->page;

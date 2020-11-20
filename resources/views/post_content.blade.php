@@ -44,7 +44,7 @@ and is wrapped around the whole page content, except for the footer in this exam
             </div>
           @endif
         @endif
-      <h5>{{$post['users']['name']}}, <span class="w3-opacity">{{ date('d-M-y', strtotime($post['created_at'])) }}</span></h5>
+      <h5>{{$post['user']['name']}}, <span class="w3-opacity">{{ date('d-M-y', strtotime($post['created_at'])) }}</span></h5>
     </div>
 
     <div class="w3-container">

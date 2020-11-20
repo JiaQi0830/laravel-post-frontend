@@ -23,7 +23,7 @@ class RegisterController extends Controller
             'password_confirmation'  => $request->password_confirmation,
             'name'      => $request->name
         ]);
-        
+
         $message = '';
         if($response->json()){
             if(isset($response->json()['error'])){
